@@ -469,13 +469,15 @@ body {
 /* Minimap */
 .minimap-container {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background: rgba(0,0,0,0.8);
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0,0,0,0.85);
     border: 2px solid #4a9eff;
     border-radius: 8px;
-    padding: 5px;
+    padding: 8px;
     z-index: 100;
+    max-width: calc(100% - 250px);
+    box-sizing: border-box;
 }
 
 .minimap-header {
@@ -491,14 +493,49 @@ body {
     display: block;
     border-radius: 4px;
     cursor: pointer;
+    width: 150px;
+    height: 150px;
+    max-width: 100%;
+    max-height: 25vh;
+}
+
+@media (max-height: 700px) {
+    #minimap {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-height: 500px) {
+    #minimap {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .minimap-header {
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 800px) {
+    .minimap-container {
+        bottom: 10px;
+        left: 10px;
+        padding: 5px;
+    }
+    
+    #minimap {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 /* Sound toggle */
 .sound-toggle {
     position: absolute;
-    bottom: 10px;
-    right: 220px;
-    background: rgba(0,0,0,0.8);
+    bottom: 15px;
+    right: 215px;
+    background: rgba(0,0,0,0.85);
     border: 2px solid #4a9eff;
     border-radius: 8px;
     padding: 8px 12px;
@@ -516,6 +553,24 @@ body {
 .sound-toggle.muted {
     border-color: #666;
     color: #666;
+}
+
+@media (max-width: 800px) {
+    .sound-toggle {
+        right: auto;
+        left: 15px;
+        bottom: 180px;
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+}
+
+@media (max-height: 500px) {
+    .sound-toggle {
+        bottom: auto;
+        top: 70px;
+        left: 15px;
+    }
 }
 
 /* Wave indicator */
