@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniFactory</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="resources" id="resource-bar"></div>
+        <div class="title-section">
+            <div class="menu-buttons">
+                <button class="menu-btn" id="btn-new">New Game</button>
+                <button class="menu-btn" id="btn-save">Save</button>
+                <button class="menu-btn" id="btn-load">Load</button>
+            </div>
+            <div class="game-title">⚙ MiniFactory</div>
+        </div>
+    </div>
+
+    <div class="game-area">
+        <div class="canvas-container">
+            <canvas id="game-canvas"></canvas>
+        </div>
+        <div class="toolbar" id="toolbar"></div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+    
+    <div class="recipe-select" id="recipe-select">
+        <h4>Select Recipe</h4>
+        <div class="recipe-option" data-recipe="gear">
+            <div class="resource-icon gear"></div>
+            <span>Iron Gear (2 iron plates)</span>
+        </div>
+        <div class="recipe-option" data-recipe="circuit">
+            <div class="resource-icon circuit"></div>
+            <span>Circuit (1 iron + 3 copper)</span>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="save-modal">
+        <div class="modal">
+            <h2>Save Game</h2>
+            <div id="save-slots"></div>
+            <button class="modal-btn" id="save-new">Save to New Slot</button>
+            <button class="modal-btn danger" onclick="game.ui.closeModal('save-modal')">Cancel</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="load-modal">
+        <div class="modal">
+            <h2>Load Game</h2>
+            <div id="load-slots"></div>
+            <button class="modal-btn danger" onclick="game.ui.closeModal('load-modal')">Cancel</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="new-modal">
+        <div class="modal">
+            <h2>New Game</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: #aaa;">Start a fresh factory? Current progress will be lost if not saved.</p>
+            <button class="modal-btn" id="confirm-new">Start New Game</button>
+            <button class="modal-btn danger" onclick="game.ui.closeModal('new-modal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Load scripts in order -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/resources.js"></script>
+    <script src="js/terrain.js"></script>
+    <script src="js/buildings.js"></script>
+    <script src="js/towers.js"></script>
+    <script src="js/enemies.js"></script>
+    <script src="js/simulation.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/saveload.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
