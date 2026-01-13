@@ -248,21 +248,37 @@ const UI = {
         const minimap = document.getElementById('minimap');
         minimap.addEventListener('click', (e) => {
             const rect = minimap.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / minimap.width;
-            const y = (e.clientY - rect.top) / minimap.height;
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
             
             Renderer.camera.x = x * CONFIG.MAP_WIDTH * CONFIG.TILE_SIZE * Renderer.camera.zoom - Renderer.canvas.width / 2;
             Renderer.camera.y = y * CONFIG.MAP_HEIGHT * CONFIG.TILE_SIZE * Renderer.camera.zoom - Renderer.canvas.height / 2;
         });
+        
+        // Handle resize
+        window.addEventListener('resize', () => this.resizeMinimap());
+        this.resizeMinimap();
+    },
+    
+    // Resize minimap canvas to match display size
+    resizeMinimap() {
+        const canvas = document.getElementById('minimap');
+        if (!canvas) return;
+        
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
     },
     
     // Update minimap
     updateMinimap() {
         const canvas = document.getElementById('minimap');
-        if (!canvas) return;
+        if (!canvas || canvas.width === 0 || canvas.height === 0) return;
         
         const ctx = canvas.getContext('2d');
-        const scale = canvas.width / CONFIG.MAP_WIDTH;
+        const scaleX = canvas.width / CONFIG.MAP_WIDTH;
+        const scaleY = canvas.height / CONFIG.MAP_HEIGHT;
+        const scale = Math.min(scaleX, scaleY);
         
         // Clear
         ctx.fillStyle = '#1a2a1a';
@@ -275,7 +291,7 @@ const UI = {
                 if (tile?.resource && tile.amount > 0) {
                     const colors = { iron: '#8899bb', copper: '#cc9966', coal: '#444' };
                     ctx.fillStyle = colors[tile.resource] || '#666';
-                    ctx.fillRect(x * scale, y * scale, scale + 0.5, scale + 0.5);
+                    ctx.fillRect(x * scaleX, y * scaleY, scaleX + 0.5, scaleY + 0.5);
                 }
             }
         }
@@ -284,30 +300,30 @@ const UI = {
         ctx.fillStyle = '#ffaa00';
         Buildings.list.forEach(b => {
             const size = Utils.getBuildingSize(b.type);
-            ctx.fillRect(b.x * scale, b.y * scale, size.w * scale + 0.5, size.h * scale + 0.5);
+            ctx.fillRect(b.x * scaleX, b.y * scaleY, size.w * scaleX + 0.5, size.h * scaleY + 0.5);
         });
         
         // Draw towers
         ctx.fillStyle = '#4a9eff';
         Towers.list.forEach(t => {
-            ctx.fillRect(t.x * scale, t.y * scale, scale + 0.5, scale + 0.5);
+            ctx.fillRect(t.x * scaleX, t.y * scaleY, scaleX + 0.5, scaleY + 0.5);
         });
         
         // Draw enemies
         ctx.fillStyle = '#ff4444';
         Enemies.list.forEach(e => {
-            const ex = e.x / CONFIG.TILE_SIZE * scale;
-            const ey = e.y / CONFIG.TILE_SIZE * scale;
+            const ex = e.x / CONFIG.TILE_SIZE * scaleX;
+            const ey = e.y / CONFIG.TILE_SIZE * scaleY;
             ctx.beginPath();
-            ctx.arc(ex, ey, 2, 0, Math.PI * 2);
+            ctx.arc(ex, ey, Math.max(2, scale * 0.5), 0, Math.PI * 2);
             ctx.fill();
         });
         
         // Draw viewport
-        const viewX = Renderer.camera.x / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scale;
-        const viewY = Renderer.camera.y / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scale;
-        const viewW = Renderer.canvas.width / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scale;
-        const viewH = Renderer.canvas.height / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scale;
+        const viewX = Renderer.camera.x / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scaleX;
+        const viewY = Renderer.camera.y / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scaleY;
+        const viewW = Renderer.canvas.width / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scaleX;
+        const viewH = Renderer.canvas.height / (CONFIG.TILE_SIZE * Renderer.camera.zoom) * scaleY;
         
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = 1;
